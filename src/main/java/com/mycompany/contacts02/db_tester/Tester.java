@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
  *
  * @author ААФ
  */
-@Component
+//@Component
 public class Tester {
 
     @Autowired
     private ContactService service;
 
-    Contact newContact = new Contact("Dastish", "Fantastish", "+7-921-5556663", "DF@gmail.com");
+    Contact newContact = new Contact("John", "Donn", "+7-921-2222222", "jd@gmail.com");
 
     public Tester() {
         System.out.println("public Tester()");
@@ -36,12 +36,12 @@ public class Tester {
         System.out.println("================================");
         System.out.println("");
         
-        System.out.println("================================");
-        System.out.println("Remove contact #3");
-        service.deleteContact(3L);
-        for(Contact cnt : service.getAllContacts()) System.out.println(cnt);
-        System.out.println("================================");
-        System.out.println("");
+//        System.out.println("================================");
+//        System.out.println("Remove contact #6");
+//        service.deleteContact(6L);
+//        for(Contact cnt : service.getAllContacts()) System.out.println(cnt);
+//        System.out.println("================================");
+//        System.out.println("");
         
         System.out.println("================================");
         System.out.println("Show contact #4");

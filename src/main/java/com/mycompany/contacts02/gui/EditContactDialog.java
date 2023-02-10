@@ -2,14 +2,20 @@ package com.mycompany.contacts02.gui;
 
 import com.mycompany.contacts02.entity.Contact;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Rectangle;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 public class EditContactDialog extends JDialog implements ActionListener {
-    
+
     private static final String DIALOG = "dialog";
     private static final String C_GIVEN = "givenname";
     private static final String C_SURNAME = "surname";
@@ -37,7 +43,9 @@ public class EditContactDialog extends JDialog implements ActionListener {
     private Long contactId = null;
     private boolean save = false;
 
-    public EditContactDialog() { this(null); }
+    public EditContactDialog() {
+        this(null);
+    }
 
     public EditContactDialog(Contact contact) {
         // remove layout - will use absolute coordinates
@@ -50,10 +58,11 @@ public class EditContactDialog extends JDialog implements ActionListener {
         setBounds(300, 300, 450, 200);
         setVisible(true);
     }
+
     // set labels and fields of input at the form
     private void buildFields() {
         // label for First name
-        JLabel lblFirstName = new JLabel(GuiResource.getLabel(DIALOG, C_GIVEN)+":");
+        JLabel lblFirstName = new JLabel(GuiResource.getLabel(DIALOG, C_GIVEN) + ":");
         // alignment by right side
         lblFirstName.setHorizontalAlignment(SwingConstants.RIGHT);
         // set coordinates
@@ -67,7 +76,7 @@ public class EditContactDialog extends JDialog implements ActionListener {
         add(textFirstName);
 
         // label for last name
-        JLabel lblLastName = new JLabel(GuiResource.getLabel(DIALOG, C_SURNAME)+":");
+        JLabel lblLastName = new JLabel(GuiResource.getLabel(DIALOG, C_SURNAME) + ":");
         // alignment by right side
         lblLastName.setHorizontalAlignment(SwingConstants.RIGHT);
         // set coordinates
@@ -81,7 +90,7 @@ public class EditContactDialog extends JDialog implements ActionListener {
         add(textLastName);
 
         // label for phone number
-        JLabel lblPhone = new JLabel(GuiResource.getLabel(DIALOG, C_PHONE)+":");
+        JLabel lblPhone = new JLabel(GuiResource.getLabel(DIALOG, C_PHONE) + ":");
         // alignment by right side
         lblPhone.setHorizontalAlignment(SwingConstants.RIGHT);
         // set coordinates
@@ -92,11 +101,11 @@ public class EditContactDialog extends JDialog implements ActionListener {
         textPhone.setBounds(new Rectangle(W_L + 2 * PAD, 2 * H_B + PAD, W_T, H_B));
         // make border for the form
         textPhone.setBorder(BorderFactory.createEtchedBorder());
-        
+
         add(textPhone);
 
         // label for email
-        JLabel lblEmail = new JLabel(GuiResource.getLabel(DIALOG, C_EMAIL)+":");
+        JLabel lblEmail = new JLabel(GuiResource.getLabel(DIALOG, C_EMAIL) + ":");
         // alignment by right side
         lblEmail.setHorizontalAlignment(SwingConstants.RIGHT);
         // set coordinates
@@ -109,6 +118,7 @@ public class EditContactDialog extends JDialog implements ActionListener {
         textEmail.setBorder(BorderFactory.createEtchedBorder());
         add(textEmail);
     }
+
     // fill fields by contact
     private void initFields(Contact c) {
         if (c != null) {
@@ -119,6 +129,7 @@ public class EditContactDialog extends JDialog implements ActionListener {
             textEmail.setText(c.getEmail());
         }
     }
+
     // put buttons onto the form
     private void buildButtons() {
         JButton btnSave = new JButton("SAVE");
@@ -132,19 +143,23 @@ public class EditContactDialog extends JDialog implements ActionListener {
         btnCancel.setBounds(new Rectangle(W_B + 2 * PAD, 5 * H_B + PAD, W_B, H_B));
         add(btnCancel);
     }
+
     // read button push
-    public void actionPerformed(ActionEvent ae){
+    public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         // if SAVE pushed
         save = action.equals(SAVE);
         // close the form
         setVisible(false);
     }
+
     public Contact getContact() {
         Contact c = new Contact(contactId, textFirstName.getText(), textLastName.getText(), textPhone.getText(),
                 textEmail.getText());
         return c;
     }
 
-    public boolean isSave() { return save; }
+    public boolean isSave() {
+        return save;
+    }
 }

@@ -1,22 +1,33 @@
 package com.mycompany.contacts02.gui;
 
-//import com.contact.business.ContactManager;
 import com.mycompany.contacts02.entity.Contact;
 import com.mycompany.contacts02.exception.ContactBusinessException;
 import com.mycompany.contacts02.service.ContactService;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class ContactFrame extends JFrame implements ActionListener {
-    
+
     private static final String FRAME = "frame";
     private static final String C_REFRESH = "refresh";
     private static final String C_ADD = "add";
@@ -28,19 +39,18 @@ public class ContactFrame extends JFrame implements ActionListener {
     private static final String EDIT = "EDIT";
     private static final String DELETE = "DELETE";
 
-   // private final ContactService contactService = new ContactServiceImpl();
+    // private final ContactService contactService = new ContactServiceImpl();
     @Autowired
     private ContactService contactService;
+
     private final JTable contactTable = new JTable();
-  
-    
-    public ContactFrame() {}
-    public void run(){
-        System.out.println("public ContactFrame()");
+
+    public ContactFrame() {
+    }
+
+    public void run() {
         //выставляем у таблицы св-во кот позволяет выделить только одну строку в таблице
         contactTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-//        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) contactTable.getDefaultRenderer(String.class);                
-//        renderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
 
         //используем layout manager
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -50,17 +60,17 @@ public class ContactFrame extends JFrame implements ActionListener {
         // эл-т раздвигается на весь размер ячейки
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         // но имеет границы - слева, сверху, справа - по 5, снизу - 0
-        gridBagConstraints.insets = new Insets(5,5, 0, 5);
-      //  gridBagConstraints.
+        gridBagConstraints.insets = new Insets(5, 5, 0, 5);
+        //  gridBagConstraints.
         // create panel for buttons
         JPanel btnPanel = new JPanel();
         // set layout to panel
         btnPanel.setLayout(gridBagLayout);
         //create buttons
-        btnPanel.add(createButton(gridBagLayout,gridBagConstraints,GuiResource.getLabel(FRAME, C_REFRESH), LOAD));
-        btnPanel.add(createButton(gridBagLayout,gridBagConstraints,GuiResource.getLabel(FRAME, C_ADD), ADD));
-        btnPanel.add(createButton(gridBagLayout,gridBagConstraints,GuiResource.getLabel(FRAME, C_UPDATE), EDIT));
-        btnPanel.add(createButton(gridBagLayout,gridBagConstraints,GuiResource.getLabel(FRAME, C_DELETE), DELETE));
+        btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_REFRESH), LOAD));
+        btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_ADD), ADD));
+        btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_UPDATE), EDIT));
+        btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_DELETE), DELETE));
         // создаем панель для левой колонки с кнопками
         JPanel left = new JPanel();
         left.setLayout(new BorderLayout());
@@ -78,7 +88,9 @@ public class ContactFrame extends JFrame implements ActionListener {
         } catch (ContactBusinessException ex) {
             Logger.getLogger(ContactFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
+
     private JButton createButton(GridBagLayout gridBagLayout, GridBagConstraints constraints, String title, String action) {
         JButton button = new JButton(title);
         // действие, которое будет проверяться в обработчике
@@ -88,28 +100,38 @@ public class ContactFrame extends JFrame implements ActionListener {
         gridBagLayout.setConstraints(button, constraints);
         return button;
     }
+
     // обработка нажатий кнопок
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
             String action = e.getActionCommand();
-            if(action.equals(LOAD)) loadContact();
-            else if(action.equals(ADD)) addContact();
-            else if(action.equals(EDIT)) editContact();
-            else deleteContact();
+            if (action.equals(LOAD)) {
+                loadContact();
+            } else if (action.equals(ADD)) {
+                addContact();
+            } else if (action.equals(EDIT)) {
+                editContact();
+            } else {
+                deleteContact();
+            }
         } catch (ContactBusinessException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
+
     // загрузка списка контактов
-    private void loadContact() throws ContactBusinessException{
+    // @PostConstruct
+    private void loadContact() throws ContactBusinessException {
         List<Contact> contacts = contactService.getAllContacts();
         // create model
         ContactModel cm = new ContactModel(contacts);
         // set model to table
-        contactTable.setModel(cm);        
+        contactTable.setModel(cm);
     }
-    private void editContact() throws ContactBusinessException{
+
+    // @PostConstruct
+    private void editContact() throws ContactBusinessException {
         // get selected row
         int rowNum = contactTable.getSelectedRow();
         // if row is selected
@@ -119,15 +141,20 @@ public class ContactFrame extends JFrame implements ActionListener {
             Contact c = contactService.getContact(id);
             EditContactDialog ecd = new EditContactDialog(c);
             saveContact(ecd);
+        } else {
+            JOptionPane.showMessageDialog(this, "Вы должны выделить строку");
         }
-        else JOptionPane.showMessageDialog(this, "Вы должны выделить строку");
     }
-    private void addContact() throws ContactBusinessException{
+
+    // @PostConstruct
+    private void addContact() throws ContactBusinessException {
         // create dialog for input data
         EditContactDialog ecd = new EditContactDialog();
         saveContact(ecd);
     }
-    private void deleteContact() throws ContactBusinessException{
+
+    // @PostConstruct
+    private void deleteContact() throws ContactBusinessException {
         int rowNum = contactTable.getSelectedRow();
         if (rowNum != -1) {
             Long id = Long.valueOf(contactTable.getModel().getValueAt(rowNum, 0).toString());
@@ -135,16 +162,22 @@ public class ContactFrame extends JFrame implements ActionListener {
             contactService.deleteContact(id);
             // reload contacts after deleting
             loadContact();
+        } else {
+            JOptionPane.showMessageDialog(this, "Вы должны выделить строку");
         }
-        else JOptionPane.showMessageDialog(this, "Вы должны выделить строку");
     }
+
     // save contact for update or add
-    private void saveContact(EditContactDialog ecd) throws ContactBusinessException{
+    //  @PostConstruct
+    private void saveContact(EditContactDialog ecd) throws ContactBusinessException {
         // if push button SAVE
         if (ecd.isSave()) {
             Contact c = ecd.getContact();
-            if (c.getContactId() != null && c.getContactId() != -1) contactService.editContact(c);
-            else contactService.addContact(c);
+            if (c.getContactId() != null && c.getContactId() != -1) {
+                contactService.editContact(c);
+            } else {
+                contactService.addContact(c);
+            }
         }
         loadContact();
     }

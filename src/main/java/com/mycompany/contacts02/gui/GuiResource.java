@@ -3,8 +3,9 @@ package com.mycompany.contacts02.gui;
 //import com.contact.config.GlobalConfig;
 //import java.util.Locale;
 import java.util.PropertyResourceBundle;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class GuiResource {
  //  private static final String RESOURCES = "C:\\NBProjects\\contacts\\src\\main\\java\\contact\\gui\\ContactResources.properties";
     private static final String RESOURCES = "contacts02/gui/ContactResources";

@@ -4,7 +4,9 @@ import com.mycompany.contacts02.entity.Contact;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ContactModel extends AbstractTableModel {
 
     private static final String[] HEADERS = {"id", "givenname", "surname", "phone", "email"};
