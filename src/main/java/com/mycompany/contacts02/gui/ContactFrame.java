@@ -25,7 +25,7 @@ import javax.swing.ListSelectionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class ContactFrame extends JFrame implements ActionListener {
 
     private static final String FRAME = "frame";

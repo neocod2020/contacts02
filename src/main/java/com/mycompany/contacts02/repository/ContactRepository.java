@@ -12,8 +12,10 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
 
     @Override
     List<Contact> findAll();
-    // public List<Contact> findAllContactsByFirstNameAndLastName(String name1, String name2);
+    List<Contact> findAllContactsByLastName(String name);
 //    @Query("select c from contacts c where c.firstName = :name1 and c.lastName = :name2")
 //    public List<Contact> findAllContactsByFirstNameAndLastName(@Param("firstName")String name1, 
 //           @Param("lastName") String name2);
+    List<Contact> getAllContactsByPhone(String phone);
+    List<Contact> getAllContactsByEmail(String email);
 }
