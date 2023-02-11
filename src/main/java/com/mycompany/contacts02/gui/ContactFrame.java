@@ -25,7 +25,7 @@ import javax.swing.ListSelectionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class ContactFrame extends JFrame implements ActionListener {
 
     private static final String FRAME = "frame";
@@ -33,11 +33,13 @@ public class ContactFrame extends JFrame implements ActionListener {
     private static final String C_ADD = "add";
     private static final String C_UPDATE = "update";
     private static final String C_DELETE = "delete";
+    private static final String C_FIND = "find";
 
     private static final String LOAD = "LOAD";
     private static final String ADD = "ADD";
     private static final String EDIT = "EDIT";
     private static final String DELETE = "DELETE";
+    private static final String FIND = "FIND";
 
     // private final ContactService contactService = new ContactServiceImpl();
     @Autowired
@@ -71,6 +73,7 @@ public class ContactFrame extends JFrame implements ActionListener {
         btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_ADD), ADD));
         btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_UPDATE), EDIT));
         btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_DELETE), DELETE));
+        btnPanel.add(createButton(gridBagLayout, gridBagConstraints, GuiResource.getLabel(FRAME, C_FIND), FIND));
         // создаем панель для левой колонки с кнопками
         JPanel left = new JPanel();
         left.setLayout(new BorderLayout());
@@ -112,6 +115,8 @@ public class ContactFrame extends JFrame implements ActionListener {
                 addContact();
             } else if (action.equals(EDIT)) {
                 editContact();
+            } else if (action.equals(FIND)) {
+                findContact();
             } else {
                 deleteContact();
             }
@@ -121,16 +126,11 @@ public class ContactFrame extends JFrame implements ActionListener {
     }
 
     // загрузка списка контактов
-    // @PostConstruct
     private void loadContact() throws ContactBusinessException {
         List<Contact> contacts = contactService.getAllContacts();
-        // create model
-        ContactModel cm = new ContactModel(contacts);
-        // set model to table
-        contactTable.setModel(cm);
+        showContacts(contacts);
     }
 
-    // @PostConstruct
     private void editContact() throws ContactBusinessException {
         // get selected row
         int rowNum = contactTable.getSelectedRow();
@@ -146,14 +146,12 @@ public class ContactFrame extends JFrame implements ActionListener {
         }
     }
 
-    // @PostConstruct
     private void addContact() throws ContactBusinessException {
         // create dialog for input data
         EditContactDialog ecd = new EditContactDialog();
         saveContact(ecd);
     }
 
-    // @PostConstruct
     private void deleteContact() throws ContactBusinessException {
         int rowNum = contactTable.getSelectedRow();
         if (rowNum != -1) {
@@ -168,7 +166,6 @@ public class ContactFrame extends JFrame implements ActionListener {
     }
 
     // save contact for update or add
-    //  @PostConstruct
     private void saveContact(EditContactDialog ecd) throws ContactBusinessException {
         // if push button SAVE
         if (ecd.isSave()) {
@@ -180,5 +177,37 @@ public class ContactFrame extends JFrame implements ActionListener {
             }
         }
         loadContact();
+    }
+
+    private void findContact() {
+        EditContactDialog ecd = new EditContactDialog();
+        Contact c = ecd.getContact();
+        List<Contact> contacts = null;
+        String name1 = c.getFirstName();
+        String name2 = c.getLastName();
+        String phone = c.getPhone();
+        String email = c.getEmail();
+        
+        if (!name1.isBlank()) {
+            contacts = contactService.getAllContactsByFirstName(name1);
+            showContacts(contacts);
+        } else if (!name2.isBlank()) {
+            contacts = contactService.getAllContactsByLastName(name2);
+            showContacts(contacts);
+        } else if (!phone.isBlank()) {
+            contacts = contactService.getAllContactsByPhone(phone);
+            showContacts(contacts);
+        } else if (!email.isBlank()) {
+            contacts = contactService.getAllContactsByEmail(email);
+            showContacts(contacts);
+        } 
+        if(contacts.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Контактов не найдено. Измените условие поиска");
+        }
+        
+    }
+    private void showContacts(List<Contact> contacts){
+        ContactModel cm = new ContactModel(contacts);
+        contactTable.setModel(cm);
     }
 }

@@ -94,6 +94,6 @@ public class Contact implements Serializable {
     @Override
     public String toString() {
         return "Contact{" + "contactId = " + contactId + ", firstName = " + firstName + ", lastName = " + lastName +
-                ", phone = " + phone + ", email = " + email;
+                ", phone = " + phone + ", email = " + email + " }";
     }
 }

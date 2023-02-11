@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  *
  * @author ААФ
  */
-@Component
+//@Component
 public class Tester {
 
     @Autowired

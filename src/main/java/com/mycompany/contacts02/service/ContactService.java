@@ -15,6 +15,8 @@ public interface ContactService {
 
     Contact getContact(long id);
 
+    List<Contact> getAllContactsByFirstName(String name);
+
     List<Contact> getAllContactsByLastName(String name);
 
     List<Contact> getAllContactsByPhone(String phone);

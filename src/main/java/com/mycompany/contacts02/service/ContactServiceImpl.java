@@ -43,6 +43,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public List<Contact> getAllContactsByFirstName(String name) {
+        return contactRepository.findAllContactsByFirstName(name);
+    }
+
+    @Override
     public List<Contact> getAllContactsByPhone(String phone) {
         return contactRepository.getAllContactsByPhone(phone);
     }

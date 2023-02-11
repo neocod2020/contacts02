@@ -7,21 +7,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GuiResource {
- //  private static final String RESOURCES = "C:\\NBProjects\\contacts\\src\\main\\java\\contact\\gui\\ContactResources.properties";
+
     private static final String RESOURCES = "contacts02/gui/ContactResources";
-    
- //   private static final String LANGUAGE = "language";
-    
+
+    //   private static final String LANGUAGE = "language";
     private static PropertyResourceBundle components = null;
-    
-    public static void initComponentResources(){
+
+    public static void initComponentResources() {
 //        String lang = GlobalConfig.getProperty(LANGUAGE);
 //        if(lang != null) components = 
 //                (PropertyResourceBundle) PropertyResourceBundle.getBundle(RESOURCES, new Locale(lang));
 //        else
         components = (PropertyResourceBundle) PropertyResourceBundle.getBundle(RESOURCES);
     }
-    public static String getLabel(String formId, String componentId){
+
+    public static String getLabel(String formId, String componentId) {
         initComponentResources();
         return components.getString(formId + "." + componentId);
     }
@@ -29,6 +29,4 @@ public class GuiResource {
     public static String getRESOURCES() {
         return RESOURCES;
     }
-    
-    
 }
